@@ -37,7 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Project
-    'sequence_field'
+    'sequence_field',
+    'app'
 )
 
 MIDDLEWARE_CLASSES = (
