@@ -1,0 +1,67 @@
+# Generic files
+*~
+*.lock
+*.out
+
+# OS specific files
+.DS_Store
+# Vim
+.*.swp
+.*.swo
+
+# Emacs
+.emacs-project
+\#.#
+*/.#*
+\#*
+.#*
+*~
+*.idea
+
+# Komodo
+*.komodoproject
+
+# Python-specific
+*.log
+*.py[co]
+
+# Virtualenv-specific
+env/
+
+# Django-specific
+local_settings.py
+doccupations/media/!.ignoreme
+doccupations/static
+#static/admin_tools
+*.pot
+
+# Python packages-specific
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+var
+sdist
+develop-eggs
+.installed.cfg
+
+# pip-specific
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+
+# SQLite-specific
+data/!.turd
+encuesta_wayka/data/encuesta_wayka.sqlite
+
+#Redis
+*.rdb
+
+#Coverage byproducts
+.coverage
+htmlcov
+cover
