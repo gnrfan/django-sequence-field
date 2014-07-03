@@ -56,7 +56,8 @@ pip-log.txt
 
 # SQLite-specific
 data/!.turd
-encuesta_wayka/data/encuesta_wayka.sqlite
+*.sqlite
+*.sqlite3
 
 #Redis
 *.rdb
