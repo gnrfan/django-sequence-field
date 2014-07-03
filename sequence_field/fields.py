@@ -2,7 +2,7 @@
 
 from django.db import models
 from sequence_field.models import Sequence
-from sequence_field.exception import SequenceFieldException
+from sequence_field.exceptions import SequenceFieldException
 from sequence_field import settings as sequence_field_settings
 from sequence_field import strings
 
@@ -44,7 +44,6 @@ class SequenceField(models.TextField):
 
         self.auto = kwargs.pop('auto', False)
 
-        kwargs['default'] = kwargs.get('default', 'null')
         kwargs['help_text'] = kwargs.get(
             'help_text', self.default_error_messages['invalid']
         )
@@ -54,11 +53,11 @@ class SequenceField(models.TextField):
     def _next_value(self):
         try:
             seq = Sequence.objects.get(key=self.key)
-            return seq.next_value(self.template, self.params, self.expanders)
         except Sequence.DoesNotExist:
-            raise SequenceFieldException(
-                strings.SEQUENCE_FIELD_KEY_MISMATCH % {'key': self.key}
-            )
+            seq = Sequence(key=self.key)
+            seq.save()
+        return seq.next_value(self.template, self.params, self.expanders)
+            
 
     def pre_save(self, model_instance, add):
         """
