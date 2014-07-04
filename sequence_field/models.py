@@ -66,10 +66,26 @@ class Sequence(models.Model):
             self.increment()
         return utils.expand(template, count, params, expanders=expanders)
 
+
+    @classmethod
+    def create_if_missing(cls, key, template=None):
+        default_template = \
+            sequence_field_settings.SEQUENCE_FIELD_DEFAULT_TEMPLATE
+        try:
+            (seq, created) = Sequence.objects.get_or_create(key=key)
+            # If a template is provided the first time it gets stored
+            if created and template is not None:
+                seq.template = template
+                seq.save()
+            return seq
+        except OperationalError:
+            return None
+
+
     @classmethod
     def next(cls, key, template=None, params=None, 
             expanders=None, commit=True):
-        seq = Sequence.objects.get_or_create(key=key)[0]
+        seq = Sequence.create_if_missing(key, template)
         return seq.next_value(template, params, expanders, commit)
 
     @classmethod
