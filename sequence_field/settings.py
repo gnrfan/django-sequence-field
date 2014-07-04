@@ -3,6 +3,13 @@
 from django.conf import settings
 from sequence_field import constants
 
+
+SEQUENCE_FIELD_DEFAULT_VALUE = getattr(
+    settings,
+    'SEQUENCE_FIELD_DEFAULT_VALUE',
+    constants.SEQUENCE_DEFAULT_VALUE
+)
+
 SEQUENCE_FIELD_ADMIN = getattr(
     settings,
     'SEQUENCE_FIELD_ADMIN',
