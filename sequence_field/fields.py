@@ -33,8 +33,9 @@ class SequenceField(models.TextField):
 
         default_template = Sequence.get_template_by_key(self.key)
         self.template = kwargs.pop('template', default_template)
-        
 
+        Sequence.create_if_missing(self.key, self.template)
+        
         default_expanders = \
             sequence_field_settings.SEQUENCE_FIELD_DEFAULT_EXPANDERS
 
@@ -51,7 +52,7 @@ class SequenceField(models.TextField):
         super(SequenceField, self).__init__(*args, **kwargs)
 
     def _next_value(self):
-        seq = Sequence.get_or_create(key=self.key)[0]
+        seq =  Sequence.create_if_missing(self.key, self.template)
         return seq.next_value(self.template, self.params, self.expanders)
             
 
