@@ -6,6 +6,7 @@ from django.utils.translation import ugettext as _
 
 SEQUENCE_KEY = _(u'Key')
 SEQUENCE_VALUE = _(u'Value')
+SEQUENCE_TEMPLATE = _(u'Template')
 SEQUENCE_CREATED = _(u'Created at')
 SEQUENCE_UPDATED = _(u'Updated at')
 

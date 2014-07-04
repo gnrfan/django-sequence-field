@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.db.utils import OperationalError
 from sequence_field import utils
 from sequence_field import strings
 from sequence_field import constants
@@ -18,7 +19,13 @@ class Sequence(models.Model):
 
     value = models.PositiveIntegerField(
         verbose_name=strings.SEQUENCE_VALUE,
-        default=constants.SEQUENCE_DEFAULT_VALUE
+        default=sequence_field_settings.SEQUENCE_FIELD_DEFAULT_VALUE
+    )
+
+    template = models.CharField(
+        verbose_name=strings.SEQUENCE_TEMPLATE,
+        max_length=constants.SEQUENCE_TEMPLATE_LENGTH,
+        default=sequence_field_settings.SEQUENCE_FIELD_DEFAULT_TEMPLATE 
     )
 
     created = models.DateTimeField(
@@ -45,10 +52,9 @@ class Sequence(models.Model):
 
     def next_value(self, template=None, params=None, 
                    expanders=None, commit=True):
-        
-        default_template = \
-            sequence_field_settings.SEQUENCE_FIELD_DEFAULT_TEMPLATE
 
+        default_template = self.template
+        
         default_expanders = \
             sequence_field_settings.SEQUENCE_FIELD_DEFAULT_EXPANDERS
 
@@ -63,5 +69,15 @@ class Sequence(models.Model):
     @classmethod
     def next(cls, key, template=None, params=None, 
             expanders=None, commit=True):
-        seq = Sequence.objects.get(key=key)
+        seq = Sequence.objects.get_or_create(key=key)[0]
         return seq.next_value(template, params, expanders, commit)
+
+    @classmethod
+    def get_template_by_key(cls, key):
+        default_template = \
+            sequence_field_settings.SEQUENCE_FIELD_DEFAULT_TEMPLATE
+        try:
+            seq = Sequence.objects.get(key=key)
+            return seq.template
+        except (OperationalError, Sequence.DoesNotExist):
+            return default_template

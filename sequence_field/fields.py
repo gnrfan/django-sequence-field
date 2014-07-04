@@ -31,9 +31,9 @@ class SequenceField(models.TextField):
             sequence_field_settings.SEQUENCE_FIELD_DEFAULT_PATTERN
         self.pattern = kwargs.pop('pattern', default_pattern)
 
-        default_template = \
-            sequence_field_settings.SEQUENCE_FIELD_DEFAULT_TEMPLATE
+        default_template = Sequence.get_template_by_key(self.key)
         self.template = kwargs.pop('template', default_template)
+        
 
         default_expanders = \
             sequence_field_settings.SEQUENCE_FIELD_DEFAULT_EXPANDERS
@@ -51,11 +51,7 @@ class SequenceField(models.TextField):
         super(SequenceField, self).__init__(*args, **kwargs)
 
     def _next_value(self):
-        try:
-            seq = Sequence.objects.get(key=self.key)
-        except Sequence.DoesNotExist:
-            seq = Sequence(key=self.key)
-            seq.save()
+        seq = Sequence.get_or_create(key=self.key)[0]
         return seq.next_value(self.template, self.params, self.expanders)
             
 
