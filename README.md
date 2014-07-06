@@ -113,4 +113,12 @@ Installation from Github
 
 ```pip install https://github.com/gnrfan/django-sequence-field/zipball/master```
 
+Add this line to your ```requirements.txt``` file:
+
+```-e git+https://github.com/gnrfan/django-sequence-field.git@HEAD#egg=django-sequence-field```
+
+Then just run:
+
+```pip install -r requirements.txt```.
+
 (c) 2014 Antonio Ognio <antonio@ognio.com>
